@@ -1,7 +1,7 @@
 import { Expose } from "class-transformer";
 import { UserEntity } from "../../databases/mysql/user.entity";
 import { PasswordEntity } from "../../databases/mysql/password.entity";
-import { IsString, isString } from "class-validator";
+import { IsNumber, IsString, isString } from "class-validator";
 
 export class UserToCreateDTO {
   @Expose()
@@ -17,7 +17,7 @@ export class UserToCreateDTO {
   email: UserEntity['email'];
 
   @Expose()
-  @IsString()
+  @IsNumber()
   age: UserEntity['age'];
 }
 
@@ -27,7 +27,7 @@ export class UserPasswordToCreateDTO {
   password_hash: PasswordEntity['password_hash'];
 
   @Expose()
-  @IsString()
+  @IsNumber()
   userId: PasswordEntity['userId'];
 }
 

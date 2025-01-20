@@ -17,7 +17,7 @@ export class UserPresenter {
       email: UserEntity['email'];
     
       @Expose()
-      @IsString()
+      @IsNumber()
       age: UserEntity['age'];
   
       @Expose()
