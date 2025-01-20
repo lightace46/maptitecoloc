@@ -1,8 +1,9 @@
-import { Repository } from "typeorm";
+import { DeepPartial, Repository } from "typeorm";
 import { UserEntity } from "../databases/mysql/user.entity";
 import { connectMySQLDB } from "../configs/databases/mysql.config";
 import { UserToCreateDTO } from "../types/user/dtos";
 import { userToCreateInput } from "../types/user/Inputs";
+import { PasswordEntity } from "../databases/mysql/password.entity";
 
 export class UserRepository {
   private userDB: Repository<UserEntity>;
@@ -12,8 +13,11 @@ export class UserRepository {
   }
 
   create(user: userToCreateInput): UserEntity {
-    const newUser = this.userDB.create(user);
-    return newUser
+    const newUser = this.userDB.create({
+      ...user,
+      password_hash: { hash: user.password_hash } as DeepPartial<PasswordEntity>
+    });
+    return newUser;
   }
 
   async save(user: UserEntity): Promise<UserEntity> {
