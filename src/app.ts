@@ -3,6 +3,7 @@ import cors from "cors";
 import helmet from "helmet";
 import userRoutes from "./routes/user/user.routes";
 import { handleValidationErrors } from "./middlewares/validation";
+import colocationRoutes from "./routes/colocation/colocation.routes";
 
 
 const app = express();
@@ -18,6 +19,7 @@ app.get("/", (req, res) => {
 });
 
 app.use("/api/users", userRoutes); // Routes pour les utilisateurs
+app.use("/api/colocations", colocationRoutes); // Routes pour les colocations
 
 // Middleware de gestion des erreurs (à vous de le personnaliser pour qu'il soit réutilisable, pensez aux classes d'erreurs)
 app.use(handleValidationErrors);

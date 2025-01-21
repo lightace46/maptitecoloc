@@ -41,7 +41,7 @@ export const login = async (req: Request, res: Response): Promise<void> => {
       return;
     }
 
-    const token = jwt.sign({ userId: user.id }, JWT_SECRET, { expiresIn: '1m' });
+    const token = jwt.sign({ userId: user.id }, JWT_SECRET, { expiresIn: '1h' });
 
     res.status(200).json({ token });
   } catch (error) {
@@ -83,7 +83,7 @@ export const refreshToken = async (req: Request, res: Response): Promise<void> =
     }
 
     const decodedToken = jwt.verify(token, JWT_SECRET) as { userId: number };
-    const newToken = jwt.sign({ userId: decodedToken.userId }, JWT_SECRET, { expiresIn: '1m' });
+    const newToken = jwt.sign({ userId: decodedToken.userId }, JWT_SECRET, { expiresIn: '1h' });
 
     res.status(200).json({ token: newToken });
   } catch (error) {
