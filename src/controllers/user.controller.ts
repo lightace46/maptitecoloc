@@ -26,3 +26,26 @@ export const registerUser = async (req: Request, res: Response): Promise<void> =
     throw error;
   }
 };
+
+export const deleteUser = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const userId = parseInt(req.params.id, 10);
+
+    if (isNaN(userId)) {
+      res.status(400).json({ message: 'Invalid user ID format' });
+      return;
+    }
+
+    const userDeleted = await userService.deleteUser(userId);
+
+    if (!userDeleted) {
+      res.status(404).json({ message: `User with ID ${req.params.id} not found` });
+      return;
+    }
+
+    res.status(200).json({ message: 'User deleted successfully' });
+  } catch (error) {
+    const errorMessage = (error instanceof Error) ? error.message : 'Unknown error';
+    res.status(500).json({ message: 'Error deleting user', error: errorMessage });
+  }
+};

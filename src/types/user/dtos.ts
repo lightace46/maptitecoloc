@@ -31,3 +31,8 @@ export class UserPasswordToCreateDTO {
   userId: PasswordEntity['userId'];
 }
 
+export class UserDeleteDTO {
+  @Expose()
+  @IsNumber()
+  userId: UserEntity['id'];
+}

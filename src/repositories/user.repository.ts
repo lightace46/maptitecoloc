@@ -1,4 +1,4 @@
-import { DeepPartial, Repository } from "typeorm";
+import { DeepPartial, DeleteResult, Repository } from "typeorm";
 import { UserEntity } from "../databases/mysql/user.entity";
 import { connectMySQLDB } from "../configs/databases/mysql.config";
 import { UserToCreateDTO } from "../types/user/dtos";
@@ -22,5 +22,11 @@ export class UserRepository {
 
   async save(user: UserEntity): Promise<UserEntity> {
     return this.userDB.save(user);
+  }
+
+  async delete(userId: number): Promise<DeleteResult> {
+    const user = await this.userDB.delete(userId);
+    console.log(user);
+    return user;
   }
 }

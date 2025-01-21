@@ -1,3 +1,4 @@
+import { deleteUser } from "../controllers/user.controller";
 import { UserEntity } from "../databases/mysql/user.entity";
 import { UserRepository } from "../repositories/user.repository";
 import { UserToCreateDTO } from "../types/user/dtos";
@@ -21,5 +22,10 @@ export class UserService {
 
     // ON RETOURNE L'UTILISATEUR CRÉÉ
     return savedUser;
+  }
+
+ async deleteUser(userId: number): Promise<boolean> {
+    const userDeleted = await this.userRepository.delete(userId);
+    return userDeleted.affected === 1;
   }
 }
