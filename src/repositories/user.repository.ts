@@ -1,9 +1,7 @@
-import { DeepPartial, DeleteResult, Repository } from "typeorm";
+import { DeleteResult, Repository } from "typeorm";
 import { UserEntity } from "../databases/mysql/user.entity";
 import { connectMySQLDB } from "../configs/databases/mysql.config";
 import { userToCreateInput } from "../types/user/Inputs";
-import { PasswordEntity } from "../databases/mysql/password.entity";
-
 
 export class UserRepository {
   private userDB: Repository<UserEntity>;
@@ -13,7 +11,6 @@ export class UserRepository {
   }
 
   create(user: userToCreateInput): UserEntity {
-    console.log(user);
     const newUser = new UserEntity();
     newUser.nom = user.nom;
     newUser.prenom = user.prenom;
@@ -30,15 +27,12 @@ export class UserRepository {
     return user || null;
   }
   
-
   async save(user: UserEntity): Promise<UserEntity> {
-    console.log(user);
     return await this.userDB.save(user);
   }
 
   async delete(userId: number): Promise<DeleteResult> {
     const user = await this.userDB.delete(userId);
-    console.log(user);
     return user;
   }
 }
