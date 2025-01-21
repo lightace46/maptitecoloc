@@ -9,7 +9,7 @@ export class PasswordEntity {
   @Column()
   password_hash: string;
   
-  @OneToOne(() => UserEntity,(user) => user.credential)
+  @OneToOne(() => UserEntity, (user) => user.credential, { onDelete: "CASCADE" }) // Cascade delete enabled
   @JoinColumn({name: "user_id"})
   user: UserEntity;
 }

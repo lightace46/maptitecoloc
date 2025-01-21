@@ -41,14 +41,14 @@ export const login = async (req: Request, res: Response): Promise<void> => {
       return;
     }
 
-    const token = jwt.sign({ userId: user.id }, JWT_SECRET, { expiresIn: '1h' });
+    const token = jwt.sign({ userId: user.id }, JWT_SECRET, { expiresIn: '1m' });
 
     res.status(200).json({ token });
   } catch (error) {
     const errorMessage = (error instanceof Error) ? error.message : 'Unknown error';
     res.status(500).json({ message: 'Error logging in user', error: errorMessage });
   }
-}
+};
 
 export const deleteUser = async (req: Request, res: Response): Promise<void> => {
   try {
@@ -70,5 +70,24 @@ export const deleteUser = async (req: Request, res: Response): Promise<void> => 
   } catch (error) {
     const errorMessage = (error instanceof Error) ? error.message : 'Unknown error';
     res.status(500).json({ message: 'Error deleting user', error: errorMessage });
+  }  
+};
+
+//refresh
+export const refreshToken = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const token = req.headers.authorization?.split(' ')[1];
+    if (!token) {
+      res.status(401).json({ message: 'No token provided' });
+      return;
+    }
+
+    const decodedToken = jwt.verify(token, JWT_SECRET) as { userId: number };
+    const newToken = jwt.sign({ userId: decodedToken.userId }, JWT_SECRET, { expiresIn: '1m' });
+
+    res.status(200).json({ token: newToken });
+  } catch (error) {
+    const errorMessage = (error instanceof Error) ? error.message : 'Unknown error';
+    res.status(500).json({ message: 'Error refreshing token', error: errorMessage });
   }
 };

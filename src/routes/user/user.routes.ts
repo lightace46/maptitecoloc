@@ -13,6 +13,9 @@ routes.delete("/delete/:id", userController.deleteUser);
 // Route pour la connexion d'un utilisateur
 routes.post("/login", userController.login);
 
+//refresh
+routes.post("/refresh", userController.refreshToken);
+
 // Route pour récupérer le profil de l'utilisateur connecté
 routes.get("/me", /* authenticate, userController.getUserProfile */);
 

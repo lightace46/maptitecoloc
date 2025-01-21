@@ -32,7 +32,13 @@ export class UserRepository {
   }
 
   async delete(userId: number): Promise<DeleteResult> {
-    const user = await this.userDB.delete(userId);
+    const user = await this.userDB.delete({id: userId});
     return user;
+  }
+
+  //refresh
+  async refreshTokens(userId: number, refreshToken: string): Promise<UserEntity | null> {
+    const user = await this.userDB.findOne({where: {id: userId}, relations: ['credential']});
+    return user || null;
   }
 }

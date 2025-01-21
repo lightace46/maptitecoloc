@@ -1,10 +1,11 @@
-import { deleteUser } from "../controllers/user.controller";
 import { PasswordEntity } from "../databases/mysql/password.entity";
 import { UserEntity } from "../databases/mysql/user.entity";
 import { UserRepository } from "../repositories/user.repository";
 import { UserToCreateDTO } from "../types/user/dtos";
 import bcrypt from 'bcrypt';
+import jwt from 'jsonwebtoken';
 
+const JWT_SECRET = 'your_jwt_secret'; // Replace with your actual secret
 
 export class UserService {
   private userRepository = new UserRepository();
@@ -50,4 +51,16 @@ export class UserService {
     const userDeleted = await this.userRepository.delete(userId);
     return userDeleted.affected === 1;
   }
+
+  async refreshToken(token: string): Promise<string> {
+    const decodedToken = jwt.verify(token, JWT_SECRET) as { userId: number };
+    const newToken = jwt.sign({ userId: decodedToken.userId }, JWT_SECRET, { expiresIn: '1h' });
+
+    return newToken;
+  }
+
+  async getUserById(userId: number): Promise<UserEntity | null> {
+    return await this.userRepository.findUserProfilByEmail(userId.toString());
+  }
+  
 }
