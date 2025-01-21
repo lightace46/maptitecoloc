@@ -19,8 +19,4 @@ export class UserPresenter {
       @Expose()
       @IsNumber()
       age: UserEntity['age'];
-  
-      @Expose()
-      @IsString()
-      password_hash: PasswordEntity['password_hash'];
 }

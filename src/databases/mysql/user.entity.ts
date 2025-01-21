@@ -18,8 +18,6 @@ export class UserEntity {
   @Column({ default: 18 }) 
   age: number;
 
-
-  @OneToOne(() => PasswordEntity, (user_password) => user_password.password_hash, { cascade: true })
-  password_hash: PasswordEntity;
+  @OneToOne(() => PasswordEntity, { cascade: true })
+  credential: PasswordEntity;
 }
-

@@ -19,6 +19,10 @@ export class UserToCreateDTO {
   @Expose()
   @IsNumber()
   age: UserEntity['age'];
+
+  @Expose()
+  @IsString()
+  password: PasswordEntity['password_hash'];
 }
 
 export class UserPasswordToCreateDTO {
@@ -28,7 +32,7 @@ export class UserPasswordToCreateDTO {
 
   @Expose()
   @IsNumber()
-  userId: PasswordEntity['userId'];
+  userId: UserEntity['id']
 }
 
 export class UserDeleteDTO {

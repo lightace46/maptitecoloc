@@ -1,4 +1,4 @@
-import { Expose } from "class-transformer";
+import { Expose, Type } from "class-transformer";
 import { IsNumber, IsString } from "class-validator";
 import { UserEntity } from "../../databases/mysql/user.entity";
 import { PasswordEntity } from "../../databases/mysql/password.entity";
@@ -21,8 +21,8 @@ export class userToCreateInput {
     age: UserEntity['age'];
 
     @Expose()
-    @IsString()
-    password_hash: PasswordEntity['password_hash'];
+    @Type(()=>PasswordEntity)
+    credential: PasswordEntity;
   }
   
   

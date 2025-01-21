@@ -1,9 +1,9 @@
 import { DeepPartial, DeleteResult, Repository } from "typeorm";
 import { UserEntity } from "../databases/mysql/user.entity";
 import { connectMySQLDB } from "../configs/databases/mysql.config";
-import { UserToCreateDTO } from "../types/user/dtos";
 import { userToCreateInput } from "../types/user/Inputs";
 import { PasswordEntity } from "../databases/mysql/password.entity";
+
 
 export class UserRepository {
   private userDB: Repository<UserEntity>;
@@ -13,15 +13,27 @@ export class UserRepository {
   }
 
   create(user: userToCreateInput): UserEntity {
-    const newUser = this.userDB.create({
-      ...user,
-      password_hash: { hash: user.password_hash } as DeepPartial<PasswordEntity>
-    });
+    console.log(user);
+    const newUser = new UserEntity();
+    newUser.nom = user.nom;
+    newUser.prenom = user.prenom;
+    newUser.age = user.age;
+    newUser.email = user.email;
+    newUser.credential = user.credential;
+    
     return newUser;
   }
 
+  async findUserProfilByEmail(email: string): Promise<UserEntity | null> {
+    const user = await this.userDB.findOne({where: {email}, relations: ['credential']});
+
+    return user || null;
+  }
+  
+
   async save(user: UserEntity): Promise<UserEntity> {
-    return this.userDB.save(user);
+    console.log(user);
+    return await this.userDB.save(user);
   }
 
   async delete(userId: number): Promise<DeleteResult> {

@@ -4,8 +4,11 @@ import { UserToCreateDTO } from "../types/user/dtos";
 import { plainToInstance } from "class-transformer";
 import { validate } from "class-validator";
 import { UserPresenter } from "../types/user/presenters";
+import jwt from 'jsonwebtoken';
 
 const userService = new UserService();
+const JWT_SECRET = 'your_jwt_secret'; // Replace with your actual secret
+
 
 export const registerUser = async (req: Request, res: Response): Promise<void> => {
   try {
@@ -17,7 +20,7 @@ export const registerUser = async (req: Request, res: Response): Promise<void> =
      throw new Error("Invalid fields");
    }
     
-    const user = await userService.registerUser(req.body);
+    const user = await userService.registerUser(userToCreateDTO);
     // appeler le logger service pour enregistrer QUI a créer un utilisateur (peut être un admin ou l'utilisateur lui même (?)  )
 
     const createdUser = plainToInstance(UserPresenter, user, { excludeExtraneousValues: true });
@@ -26,6 +29,26 @@ export const registerUser = async (req: Request, res: Response): Promise<void> =
     throw error;
   }
 };
+
+export const login = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const { email, password } = req.body;
+    console.log('teest')
+    const user = await userService.loginUser(email, password);
+
+    if (!user) {
+      res.status(401).json({ message: 'Invalid credentials' });
+      return;
+    }
+
+    const token = jwt.sign({ userId: user.id }, JWT_SECRET, { expiresIn: '1h' });
+
+    res.status(200).json({ token });
+  } catch (error) {
+    const errorMessage = (error instanceof Error) ? error.message : 'Unknown error';
+    res.status(500).json({ message: 'Error logging in user', error: errorMessage });
+  }
+}
 
 export const deleteUser = async (req: Request, res: Response): Promise<void> => {
   try {

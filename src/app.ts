@@ -2,6 +2,8 @@ import express from "express";
 import cors from "cors";
 import helmet from "helmet";
 import userRoutes from "./routes/user/user.routes";
+import { handleValidationErrors } from "./middlewares/validation";
+
 
 const app = express();
 
@@ -18,15 +20,6 @@ app.get("/", (req, res) => {
 app.use("/api/users", userRoutes); // Routes pour les utilisateurs
 
 // Middleware de gestion des erreurs (à vous de le personnaliser pour qu'il soit réutilisable, pensez aux classes d'erreurs)
-app.use((err: any, req: express.Request, res: express.Response, next: express.NextFunction) => {
-  console.log(err);
-  
-  const statusCode = err.statusCode || 500;
-  res.status(statusCode).json({
-    statusCode,
-    errorCode: err.code || "INTERNAL_SERVER_ERROR",
-    message: err.message || "An unexpected error occurred",
-  });
-});
+app.use(handleValidationErrors);
 
 export default app;
