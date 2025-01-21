@@ -60,7 +60,8 @@ export class UserService {
   }
 
   async getUserById(userId: number): Promise<UserEntity | null> {
-    return await this.userRepository.findUserProfilByEmail(userId.toString());
+    const user = await this.userRepository.findUserProfilById(userId);
+    return user || null;
   }
   
 }

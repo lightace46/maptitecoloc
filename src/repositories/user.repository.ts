@@ -26,6 +26,11 @@ export class UserRepository {
 
     return user || null;
   }
+
+  async findUserProfilById(userId: number): Promise<UserEntity | null> {
+    const user = await this.userDB.findOne({where: {id: userId}, relations: ['credential']});
+    return user || null;
+  }
   
   async save(user: UserEntity): Promise<UserEntity> {
     return await this.userDB.save(user);

@@ -1,6 +1,7 @@
 import { Router } from 'express';
 
 import * as userController from "../../controllers/user.controller";
+import { authenticateToken } from '../../middlewares/authMiddleware';
 
 // import { authenticate } from "../middlewares/auth.middleware";
 
@@ -17,7 +18,7 @@ routes.post("/login", userController.login);
 routes.post("/refresh", userController.refreshToken);
 
 // Route pour récupérer le profil de l'utilisateur connecté
-routes.get("/me", /* authenticate, userController.getUserProfile */);
+routes.get("/me", authenticateToken, userController.getUserProfile );
 
 
 export default routes;

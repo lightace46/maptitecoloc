@@ -13,3 +13,7 @@ export const verifyToken = (token: string): any => {
     throw new Error("Invalid token");
   }
 };
+
+export const verifyAccessToken = (token: string) => {
+  return jwt.verify(token, secretKey);
+};
